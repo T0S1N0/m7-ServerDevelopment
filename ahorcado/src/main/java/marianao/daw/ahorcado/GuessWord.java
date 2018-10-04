@@ -3,21 +3,21 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package marianao.daw.httprequest;
+package marianao.daw.ahorcado;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Enumeration;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
  * @author mmartin
  */
-public class Peticion extends HttpServlet {
+public class GuessWord extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -30,36 +30,38 @@ public class Peticion extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        try (PrintWriter out = response.getWriter()) {
-            out.println("<header>");
-                out.println("<link rel=\"stylesheet\" href=\"https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css\" integrity=\"sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm\" crossorigin=\"anonymous\">");
-            out.println("</header>");
-            out.println("<body>");
-                Enumeration<String> headerNames = request.getHeaderNames();
-                out.println("<table class=\"table\">");
-                    out.println("<tr style=\"background-color: cyan\">");
-                        out.println("<th scope=\"col\">"+ "NOM DEL PARAMETRE" +"</th>");
-                        out.println("<th scope=\"col\">"+ "VALOR" +"</th>");
-                    out.println("</tr>");
-                while (headerNames.hasMoreElements()) {
-                    String paramName = headerNames.nextElement();
-                    String paramValue = request.getHeader(paramName);
-                    out.println("<tr>");
-                        out.println("<td scope=\"row\">"+ paramName +"</td>");
-                        out.println("<td scope=\"row\">"+ paramValue +"</td>");
-                    out.println("</tr>");
+        HttpSession session = request.getSession();
+        response.setContentType("text/html;charset=UTF-8");
+        
+        char letter = request.getParameter("userLetter").charAt(0);
+        String secretWord = (String) session.getAttribute("secretWord");
+        String hiddenWord = (String) session.getAttribute("hiddenWord");
+        /*StringBuilder hiddenWord = new StringBuilder((String) session.getAttribute("hiddenWord"));
+        
+        for (int i = 0; i < secretWord.length(); i++){
+            if (letter == secretWord.charAt(i)) {
+                for (int j = 0; j < secretWord.length(); j++) {
+                    
+                    if (i==j)
+                        hiddenWord.replace(j, j, letter.toString());
+                        hiddenWord.setCharAt(i, letter);  
                 }
-                out.println("</table>");
-                out.println("<script src=\"https://code.jquery.com/jquery-3.2.1.slim.min.js\" integrity=\"sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN\" crossorigin=\"anonymous\"></script>");
-                out.println("<script src=\"https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js\" integrity=\"sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q\" crossorigin=\"anonymous\"></script>");
-                out.println("<script src=\"https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js\" integrity=\"sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl\" crossorigin=\"anonymous\"></script>");
-            
+            }
+        }*/
+        
+        try (PrintWriter out = response.getWriter()) {
+            /* TODO output your page here. You may use following sample code. */
+            out.println("<!DOCTYPE html>");
+            out.println("<html>");
+            out.println("<head>");
+            out.println("<title>Servlet GuessWord</title>");            
+            out.println("</head>");
+            out.println("<body>");
+            out.println("<h1>Servlet GuessWord at " + hiddenWord + "</h1>");
             out.println("</body>");
-             
+            out.println("</html>");
         }
-
     }
-    
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**

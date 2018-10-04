@@ -7,10 +7,8 @@ package marianao.daw.httprequest;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.Collection;
-import java.util.Enumeration;
+import java.net.URLConnection;
 import java.util.List;
 import java.util.Map;
 import javax.servlet.ServletException;
@@ -36,9 +34,9 @@ public class Respuesta extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        String google = "https://www.google.es/";
-        URL url = new URL(google);
-        HttpURLConnection requestGoogle = (HttpURLConnection)url.openConnection();
+        
+        URL google = new URL("https://www.google.es/");
+        URLConnection requestGoogle = google.openConnection();
         
         try (PrintWriter out = response.getWriter()) {
             out.println("<header>");
@@ -46,34 +44,35 @@ public class Respuesta extends HttpServlet {
             out.println("</header>");
             out.println("<body>");
                 Map<String, List<String>> headerNames = requestGoogle.getHeaderFields();
+                 
+
+                
                 
                 out.println("<table class=\"table\">");
                     out.println("<tr style=\"background-color: cyan\">");
-                        out.println("<th scope=\"col\">"+ "Nom del Parametre" +"</th>");
-                        out.println("<th scope=\"col\">"+ "Valor" +"</th>");
+                        out.println("<th scope=\"col\">"+ "NOM DEL PARAMETRE" +"</th>");
+                        out.println("<th scope=\"col\">"+ "VALOR" +"</th>");
                     out.println("</tr>");
                 
-                    for (final String key : headerNames.keySet()) {
+                    for (String key : headerNames.keySet()) {
    
                     out.println("<tr>");
-                        out.println("<td scope=\"row\">"+ key +"</td>");
-                        //falta poner las respuestas
-                        out.println("<td scope=\"row\">"+ headerNames.values() +"</td>");
+                    
+                        out.println("<td scope=\"row\">"+ key +"</td>");                       
+                        out.println("<td scope=\"row\">"+ requestGoogle.getHeaderField(key) +"</td>");
+                        
                     out.println("</tr>");
+                    
                     }
               
                 out.println("</table>");
+                
                 out.println("<script src=\"https://code.jquery.com/jquery-3.2.1.slim.min.js\" integrity=\"sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN\" crossorigin=\"anonymous\"></script>");
                 out.println("<script src=\"https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js\" integrity=\"sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q\" crossorigin=\"anonymous\"></script>");
                 out.println("<script src=\"https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js\" integrity=\"sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl\" crossorigin=\"anonymous\"></script>");
             
             out.println("</body>");
             
-            
-            
-            
-          
-            out.println(requestGoogle.getHeaderFields());
         }
     }
 
