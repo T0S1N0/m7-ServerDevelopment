@@ -6,7 +6,6 @@
 package marianao.daw.ahorcado;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -31,9 +30,9 @@ public class SaveWord extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         //response.setContentType("text/html;charset=UTF-8");
-        
+
         String secretWord = request.getParameter("secretWord");
-        
+
         char[] hiddenWord = new char[secretWord.length()];
         for (int i = 0; i < secretWord.length(); i++) {
             hiddenWord[i] = '-';//comillas = char | comillas dobles = string
@@ -42,19 +41,6 @@ public class SaveWord extends HttpServlet {
         createSession(request, secretWord, hiddenWord);
 
         response.sendRedirect(request.getContextPath() + "/guessWord.jsp");
-
-//        try (PrintWriter out = response.getWriter()) {
-//            /* TODO output your page here. You may use following sample code. */
-//            out.println("<!DOCTYPE html>");
-//            out.println("<html>");
-//            out.println("<head>");
-//            out.println("<title>Servlet SaveWord</title>");
-//            out.println("</head>");
-//            out.println("<body>");
-//            out.println("<h1>Servlet SaveWord at " + hiddenWord + "</h1>");
-//            out.println("</body>");
-//            out.println("</html>");
-//        }
     }
 
     protected void createSession(HttpServletRequest request, String secretWord, char[] hiddenWord) {
@@ -62,8 +48,8 @@ public class SaveWord extends HttpServlet {
         session.setAttribute("secretWord", secretWord);
         session.setAttribute("hiddenWord", hiddenWord);
         //Transformar la array de chars a String para que el usuario la pueda leer en pantalla
-            String hiddenWordString = new String(hiddenWord);
-            session.setAttribute("hiddenWordString", hiddenWordString);
+        String hiddenWordString = new String(hiddenWord);
+        session.setAttribute("hiddenWordString", hiddenWordString);
         session.setAttribute("intentos", getServletContext().getInitParameter("intentos"));
     }
 

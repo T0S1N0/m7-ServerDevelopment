@@ -6,7 +6,6 @@
 package marianao.daw.ahorcado;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.Arrays;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -53,21 +52,8 @@ public class GuessWord extends HttpServlet {
         }
 
         updateSession(request, secretWord, hiddenWord, intentos);
-        
-        checkStatus(secretWord, hiddenWord, intentos, request, response);
 
-//        try (PrintWriter out = response.getWriter()) {
-//            /* TODO output your page here. You may use following sample code. */
-//            out.println("<!DOCTYPE html>");
-//            out.println("<html>");
-//            out.println("<head>");
-//            out.println("<title>Servlet GuessWord</title>");
-//            out.println("</head>");
-//            out.println("<body>");
-//            out.println("<h1>Servlet GuessWord at " + hiddenWordString + intentos + "</h1>");
-//            out.println("</body>");
-//            out.println("</html>");
-//        }
+        checkStatus(secretWord, hiddenWord, intentos, request, response);
     }
 
     protected void updateSession(HttpServletRequest request, String secretWord, char[] hiddenWord, int intentos) {
@@ -79,8 +65,8 @@ public class GuessWord extends HttpServlet {
         session.setAttribute("hiddenWordString", hiddenWordString);
         session.setAttribute("intentos", intentos);
     }
-    
-    protected void checkStatus(String secretWord, char[] hiddenWord, int intentos, HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException{
+
+    protected void checkStatus(String secretWord, char[] hiddenWord, int intentos, HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         //Transforma el String secretWord en una cadena de chars para poder compararlo con la palabra encriptada
         if (Arrays.equals(secretWord.toCharArray(), hiddenWord)) {
             response.sendRedirect(request.getContextPath() + "/youWin.jsp");
@@ -88,7 +74,7 @@ public class GuessWord extends HttpServlet {
             response.sendRedirect(request.getContextPath() + "/gameOver.jsp");
         } else {
             RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/guessWord.jsp");
-            dispatcher.forward(request,response);
+            dispatcher.forward(request, response);
             //response.sendRedirect(request.getContextPath() + "/guessWord.jsp");
         }
     }
