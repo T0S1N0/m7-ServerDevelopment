@@ -12,7 +12,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.websocket.Session;
 
 /**
  *
@@ -31,37 +30,41 @@ public class SaveWord extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
+        //response.setContentType("text/html;charset=UTF-8");
         
-        HttpSession session = request.getSession();
-
-            session.setAttribute("secretWord", request.getParameter("secretWord"));
-            
-            int hiddenWordLength = request.getParameter("secretWord").length();
-            String hiddenWord = "";
-            
-            for (int i = 0; i < hiddenWordLength; i++) {
-                hiddenWord += "_ ";
-            }
-            
-            session.setAttribute("hiddenWord", hiddenWord);
-            
-            session.setAttribute("intentos",getServletContext().getInitParameter("intentos"));
+        String secretWord = request.getParameter("secretWord");
         
-            response.sendRedirect(request.getContextPath() + "/guessWord.jsp");
-            
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet SaveWord</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet SaveWord at " + session.getAttribute("intentos") + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+        char[] hiddenWord = new char[secretWord.length()];
+        for (int i = 0; i < secretWord.length(); i++) {
+            hiddenWord[i] = '-';//comillas = char | comillas dobles = string
         }
+
+        createSession(request, secretWord, hiddenWord);
+
+        response.sendRedirect(request.getContextPath() + "/guessWord.jsp");
+
+//        try (PrintWriter out = response.getWriter()) {
+//            /* TODO output your page here. You may use following sample code. */
+//            out.println("<!DOCTYPE html>");
+//            out.println("<html>");
+//            out.println("<head>");
+//            out.println("<title>Servlet SaveWord</title>");
+//            out.println("</head>");
+//            out.println("<body>");
+//            out.println("<h1>Servlet SaveWord at " + hiddenWord + "</h1>");
+//            out.println("</body>");
+//            out.println("</html>");
+//        }
+    }
+
+    protected void createSession(HttpServletRequest request, String secretWord, char[] hiddenWord) {
+        HttpSession session = request.getSession();
+        session.setAttribute("secretWord", secretWord);
+        session.setAttribute("hiddenWord", hiddenWord);
+        //Transformar la array de chars a String para que el usuario la pueda leer en pantalla
+            String hiddenWordString = new String(hiddenWord);
+            session.setAttribute("hiddenWordString", hiddenWordString);
+        session.setAttribute("intentos", getServletContext().getInitParameter("intentos"));
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -89,7 +92,7 @@ public class SaveWord extends HttpServlet {
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {                
+            throws ServletException, IOException {
         processRequest(request, response);
     }
 
