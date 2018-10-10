@@ -31,7 +31,7 @@ public class SaveWord extends HttpServlet {
             throws ServletException, IOException {
         //response.setContentType("text/html;charset=UTF-8");
 
-        String secretWord = request.getParameter("secretWord");
+        String secretWord = request.getParameter("secretWord").toUpperCase();
 
         char[] hiddenWord = new char[secretWord.length()];
         for (int i = 0; i < secretWord.length(); i++) {

@@ -32,9 +32,8 @@ public class GuessWord extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession();
-        //response.setContentType("text/html;charset=UTF-8");
 
-        String letter = request.getParameter("userLetter");
+        String letter = request.getParameter("userLetter").toUpperCase();
         //Realizamos el cast de las variables de sesion(Objects) para poder utilizarlas
         String secretWord = (String) session.getAttribute("secretWord");
         char[] hiddenWord = (char[]) session.getAttribute("hiddenWord");
@@ -43,13 +42,11 @@ public class GuessWord extends HttpServlet {
 
         if (secretWord.contains(letter)) {
             for (int i = 0; i < secretWord.length(); i++) {
-                if (hiddenWord[i] == '-' && secretWord.charAt(i) == letter.charAt(0)) {
+                if (hiddenWord[i] == '-' && (secretWord.charAt(i) == letter.charAt(0))) {
                     hiddenWord[i] = letter.charAt(0);
                 }
             }
-        } else {
-            intentos--;
-        }
+        } else intentos--;
 
         updateSession(request, secretWord, hiddenWord, intentos);
 
@@ -73,9 +70,9 @@ public class GuessWord extends HttpServlet {
         } else if (intentos == 0) {
             response.sendRedirect(request.getContextPath() + "/gameOver.jsp");
         } else {
+            //Como vamos a seguir en la misma vista usaremos foreward
             RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/guessWord.jsp");
             dispatcher.forward(request, response);
-            //response.sendRedirect(request.getContextPath() + "/guessWord.jsp");
         }
     }
 

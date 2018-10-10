@@ -6,6 +6,7 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
+<link rel="stylesheet" href="customStyles/Styles.css">
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -15,6 +16,7 @@
         <h1>Game Over</h1>
         <h2>Lo siento. Has perdido</h2>
         <h2>La palabra era ${sessionScope.secretWord}</h2>
+        <div><img src="images/hang0.png"/></div>
         <a href="index.jsp">Jugar de nuevo</a>
     </body>
 </html>
