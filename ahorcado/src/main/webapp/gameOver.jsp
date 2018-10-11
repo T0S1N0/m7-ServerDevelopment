@@ -16,7 +16,7 @@
         <h1>Game Over</h1>
         <h2>Lo siento. Has perdido</h2>
         <h2>La palabra era ${sessionScope.secretWord}</h2>
-        <div><img src="images/hang0.png"/></div>
+        <div style="float: right;"><img src="images/hang0.png"/></div>
         <a href="index.jsp">Jugar de nuevo</a>
     </body>
 </html>
