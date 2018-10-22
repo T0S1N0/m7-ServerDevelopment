@@ -46,7 +46,9 @@ public class GuessWord extends HttpServlet {
                     hiddenWord[i] = letter.charAt(0);
                 }
             }
-        } else intentos--;
+        } else {
+            intentos--;
+        }
 
         updateSession(request, secretWord, hiddenWord, intentos);
 
