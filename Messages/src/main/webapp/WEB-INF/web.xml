@@ -6,12 +6,28 @@
         <init-param>
             <description>The system route to the mail dir.</description>
             <param-name>route</param-name>
-            <param-value>/C:\Users\mmartin\usersMail</param-value>
+            <param-value>C:\usersMail</param-value>
         </init-param>
+    </servlet>
+    <servlet>
+        <servlet-name>WriteNewMessageServlet</servlet-name>
+        <servlet-class>marianao.daw.messages.WriteNewMessageServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>GetMessageServlet</servlet-name>
+        <servlet-class>marianao.daw.messages.GetMessageServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>MessagesServlet</servlet-name>
         <url-pattern>/secured/MessagesServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>WriteNewMessageServlet</servlet-name>
+        <url-pattern>/WriteNewMessageServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>GetMessageServlet</servlet-name>
+        <url-pattern>/GetMessageServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
