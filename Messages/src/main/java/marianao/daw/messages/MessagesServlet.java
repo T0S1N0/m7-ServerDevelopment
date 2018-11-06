@@ -3,20 +3,31 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package marianao.daw.ahorcado;
+package marianao.daw.messages;
 
+import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 /**
  *
  * @author mmartin
  */
-public class SaveWord extends HttpServlet {
+public class MessagesServlet extends HttpServlet {
+    private String dirRoute;
+    private String user;
+    
+    
+
+    @Override
+    public void init() throws ServletException {
+        dirRoute = getServletConfig().getInitParameter("route");  
+        new File(dirRoute).mkdirs();
+    }
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -27,30 +38,42 @@ public class SaveWord extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+  
+    
+    protected void pageGenerator(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        //response.setContentType("text/html;charset=UTF-8");
-
-        String secretWord = request.getParameter("secretWord").toUpperCase();
-
-        char[] hiddenWord = new char[secretWord.length()];
-        for (int i = 0; i < secretWord.length(); i++) {
-            hiddenWord[i] = '-';//comillas = char | comillas dobles = string
+           user = request.getUserPrincipal().getName(); 
+        response.setContentType("text/html;charset=UTF-8");
+        try (PrintWriter out = response.getWriter()) {
+            out.println("<!DOCTYPE html>");
+            out.println("<html>");
+            out.println("<head>");
+            out.println("<title>Mensajes de  " + user + "</title>");
+            out.println("</head>");
+            out.println("<body>");
+            out.println("<header>");
+            out.println("<h1>¡Hola " + user + "! Estos son tus mensajes</h1>");
+            out.println("<div>");
+            out.println("<a>Log out</a>");
+            out.println("</div>");
+            out.println("</header>");
+            out.println("<a> Nuevo mensaje </a>");
+            out.println("<div>");
+            out.println("Aqui se muestran todos los mensajes.");
+            out.println("</div>");
+            out.println("</body>");
+            out.println("</html>");
         }
-
-        createSession(request, secretWord, hiddenWord);
-
-        response.sendRedirect(request.getContextPath() + "/guessWord.jsp");
     }
-
-    protected void createSession(HttpServletRequest request, String secretWord, char[] hiddenWord) {
-        HttpSession session = request.getSession();
-        session.setAttribute("secretWord", secretWord);
-        session.setAttribute("hiddenWord", hiddenWord);
-        //Transformar la array de chars a String para que el usuario la pueda leer en pantalla
-        String hiddenWordString = new String(hiddenWord);
-        session.setAttribute("hiddenWordString", hiddenWordString);
-        session.setAttribute("tries", getServletContext().getInitParameter("tries"));
+    
+    protected void newMessage(){
+        
+    }
+    protected void deleteMessage(){
+    }
+    protected void logOut(){
+    }
+    protected void saveSession(){
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -65,7 +88,7 @@ public class SaveWord extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        pageGenerator(request, response);
     }
 
     /**
@@ -79,7 +102,7 @@ public class SaveWord extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        pageGenerator(request, response);
     }
 
     /**

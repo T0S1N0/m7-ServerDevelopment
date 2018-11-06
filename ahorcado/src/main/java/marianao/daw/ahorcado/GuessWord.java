@@ -37,8 +37,8 @@ public class GuessWord extends HttpServlet {
         //Realizamos el cast de las variables de sesion(Objects) para poder utilizarlas
         String secretWord = (String) session.getAttribute("secretWord");
         char[] hiddenWord = (char[]) session.getAttribute("hiddenWord");
-        //Guardamos el parametro de inicio 'intentos' como cadena en una variable int para poder operar con el
-        int intentos = new Integer(session.getAttribute("intentos").toString());
+        //Guardamos el parametro de inicio 'tries' como cadena en una variable int para poder operar con el
+        int tries = new Integer(session.getAttribute("tries").toString());
 
         if (secretWord.contains(letter)) {
             for (int i = 0; i < secretWord.length(); i++) {
@@ -47,29 +47,29 @@ public class GuessWord extends HttpServlet {
                 }
             }
         } else {
-            intentos--;
+            tries--;
         }
 
-        updateSession(request, secretWord, hiddenWord, intentos);
+        updateSession(request, secretWord, hiddenWord, tries);
 
-        checkStatus(secretWord, hiddenWord, intentos, request, response);
+        checkStatus(secretWord, hiddenWord, tries, request, response);
     }
 
-    protected void updateSession(HttpServletRequest request, String secretWord, char[] hiddenWord, int intentos) {
+    protected void updateSession(HttpServletRequest request, String secretWord, char[] hiddenWord, int tries) {
         HttpSession session = request.getSession();
         session.setAttribute("secretWord", secretWord);
         session.setAttribute("hiddenWord", hiddenWord);
         //Transformar la array de chars a String para que el usuario la pueda leer en pantalla
         String hiddenWordString = new String(hiddenWord);
         session.setAttribute("hiddenWordString", hiddenWordString);
-        session.setAttribute("intentos", intentos);
+        session.setAttribute("tries", tries);
     }
 
-    protected void checkStatus(String secretWord, char[] hiddenWord, int intentos, HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+    protected void checkStatus(String secretWord, char[] hiddenWord, int tries, HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         //Transforma el String secretWord en una cadena de chars para poder compararlo con la palabra encriptada
         if (Arrays.equals(secretWord.toCharArray(), hiddenWord)) {
             response.sendRedirect(request.getContextPath() + "/youWin.jsp");
-        } else if (intentos == 0) {
+        } else if (tries == 0) {
             response.sendRedirect(request.getContextPath() + "/gameOver.jsp");
         } else {
             //Como vamos a seguir en la misma vista usaremos foreward

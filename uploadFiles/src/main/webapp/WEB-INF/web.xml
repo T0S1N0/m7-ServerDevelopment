@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="3.1" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
+    <servlet>
+        <servlet-name>uploadFilesServlet</servlet-name>
+        <servlet-class>marianao.daw.uploadfiles.UploadFilesServlet</servlet-class>
+        <init-param>
+            <description>Get the directory to save mails.</description>
+            <param-name>dir</param-name>
+            <param-value>/C:\Users\mmartin\mail</param-value>
+        </init-param>
+        <multipart-config>
+            <location>/C:\Users\mmartin\mail</location>
+            <max-file-size>20848820</max-file-size>
+        </multipart-config>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>uploadFilesServlet</servlet-name>
+        <url-pattern>/uploadFilesServlet</url-pattern>
+    </servlet-mapping>
+    <session-config>
+        <session-timeout>
+            30
+        </session-timeout>
+    </session-config>
+</web-app>

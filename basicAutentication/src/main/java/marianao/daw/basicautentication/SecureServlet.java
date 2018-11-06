@@ -3,20 +3,22 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package marianao.daw.ahorcado;
+package marianao.daw.basicautentication;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 /**
  *
  * @author mmartin
  */
-public class SaveWord extends HttpServlet {
+@WebServlet(name = "SecureServlet", urlPatterns = {"/SecureServlet"})
+public class SecureServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -29,28 +31,25 @@ public class SaveWord extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        //response.setContentType("text/html;charset=UTF-8");
-
-        String secretWord = request.getParameter("secretWord").toUpperCase();
-
-        char[] hiddenWord = new char[secretWord.length()];
-        for (int i = 0; i < secretWord.length(); i++) {
-            hiddenWord[i] = '-';//comillas = char | comillas dobles = string
+        
+        String myUsername = request.getParameter("username");
+        String myPassword = request.getParameter("password");
+        
+        request.login(myUsername, myPassword);
+        
+        response.setContentType("text/html;charset=UTF-8");
+        try (PrintWriter out = response.getWriter()) {
+            /* TODO output your page here. You may use following sample code. */
+            out.println("<!DOCTYPE html>");
+            out.println("<html>");
+            out.println("<head>");
+            out.println("<title>Servlet SecureServlet</title>");            
+            out.println("</head>");
+            out.println("<body>");
+            out.println("<h1>Servlet SecureServlet at " + request.getContextPath() + "</h1>");
+            out.println("</body>");
+            out.println("</html>");
         }
-
-        createSession(request, secretWord, hiddenWord);
-
-        response.sendRedirect(request.getContextPath() + "/guessWord.jsp");
-    }
-
-    protected void createSession(HttpServletRequest request, String secretWord, char[] hiddenWord) {
-        HttpSession session = request.getSession();
-        session.setAttribute("secretWord", secretWord);
-        session.setAttribute("hiddenWord", hiddenWord);
-        //Transformar la array de chars a String para que el usuario la pueda leer en pantalla
-        String hiddenWordString = new String(hiddenWord);
-        session.setAttribute("hiddenWordString", hiddenWordString);
-        session.setAttribute("tries", getServletContext().getInitParameter("tries"));
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
