@@ -5,27 +5,20 @@
  */
 package marianao.daw.messages;
 
-import java.io.BufferedWriter;
+
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.io.Writer;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
  * @author mmartin
  */
 public class MessagesServlet extends HttpServlet {
-
     private String dirRoute;
     private String user;
 
@@ -36,74 +29,60 @@ public class MessagesServlet extends HttpServlet {
 
     protected void pageGenerator(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
-        buildDirectories(request);
-
-        newMessage();
-
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            out.println("<!DOCTYPE html>");
-            out.println("<script></script>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Messages</title>");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<header>");
-            out.println("<h1>Your Messages " + user + "</h1>");
-            out.println("<button onclick=\"window.location.replace('http://localhost:8080/Messages/writeNewMessageForm.jsp');\"> Write New </button>");
-            out.println("<div>");
-            out.println("<h3>Inbox</h3>");
-            out.println("<a>"+ listFilesInFolder() +"</a>");
-            out.println("<h3>Sent</h3>");
-            out.println("<a>Enviados</a>");
-            out.println("</div>");
-            out.println("</body>");
-            out.println("</html>");
-        }
-    }
-
-    protected void buildDirectories(HttpServletRequest request) {
+        
         user = request.getUserPrincipal().getName();
-        String parentFolder = dirRoute + "\\" + user;
+        String parentFolder = dirRoute + File.separator + user;
+
+        buildDirectories(parentFolder);
+
+        saveSession(request);
+
+        response.sendRedirect(request.getContextPath() + "/welcomePage.jsp");
+        
+    }
+
+    protected void buildDirectories(String parentFolder) {
         new File(parentFolder).mkdir();
-        new File(parentFolder + "\\Received").mkdir();
-        new File(parentFolder + "\\Sent").mkdir();
+        new File(parentFolder + File.separator + "Received").mkdir();
+        new File(parentFolder + File.separator + "Sent").mkdir();
 
     }
 
-    protected String listFilesInFolder() {
-        File folder = new File(dirRoute + "\\" + user + "\\Received");
+    protected String[] listFilesInFolder(String receivedOrSent) {
+        
+        File folder = new File(dirRoute + File.separator + user + File.separator + receivedOrSent);//File.separator hace referencia al caracter "/"
         File[] listOfFiles = folder.listFiles();
+        String[] listOfMsgArray = new String[listOfFiles.length];
 
         for (int i = 0; i < listOfFiles.length; i++) {
             if (listOfFiles[i].isFile()) {
-                System.out.println("File " + listOfFiles[i].getName());
+                listOfMsgArray[i] = listOfFiles[i].getName();
             }
         }
-        return null;
+        return listOfMsgArray;
     }
 
-    protected void newMessage() throws IOException {
-
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd-HH:mm");
-        Date date = new Date();
-        System.out.println(dateFormat.format(date));
-
-        try (Writer writer = new BufferedWriter(new OutputStreamWriter(
-                new FileOutputStream(dirRoute + "\\" + user + "\\" + dateFormat.format(date) + ".msg"), "utf-8"))) {
-            writer.write("something");
-        }
-    }
-
-    protected void deleteMessage() {
-    }
+//    protected void newMessage() throws IOException {
+//
+//        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd-HH:mm");
+//        Date date = new Date();
+//        System.out.println(dateFormat.format(date));
+//
+//        try (Writer writer = new BufferedWriter(new OutputStreamWriter(
+//                new FileOutputStream(dirRoute + "\\" + user + "\\" + dateFormat.format(date) + ".msg"), "utf-8"))) {
+//            writer.write("something");
+//        }
+//    }
 
     protected void logOut() {
     }
 
-    protected void saveSession() {
+    protected void saveSession(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        session.setAttribute("user", user);
+        session.setAttribute("dirRoute", dirRoute);
+        session.setAttribute("receivedMSG", listFilesInFolder("Received"));
+        session.setAttribute("sentMSG", listFilesInFolder("Sent"));
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
