@@ -5,12 +5,20 @@
  */
 package marianao.daw.messages;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -29,19 +37,14 @@ public class WriteNewMessageServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet WriteNewMessageServlet</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet WriteNewMessageServlet at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
+        
+        HttpSession session = request.getSession();
+        String dirRoute = (String) session.getAttribute("dirRoute");
+      
+        newMessage(request.getParameter("userSelected"), request.getParameter("content"), dirRoute );       
+        
+        response.sendRedirect(request.getContextPath());
+        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -82,5 +85,35 @@ public class WriteNewMessageServlet extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
+    
+    
+   protected void newMessage(String user, String content, String dirRoute) throws IOException{
+                      
+       DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd-HH.mm.ss");
+       Date date = new Date();
+       
+       String parentFolderStr = dirRoute + File.separator + user;
+       File parentFolder = new File(parentFolderStr);
+       
+       if (!parentFolder.exists()) {
+           buildDirectories(parentFolderStr);
+       }
+           
+        try (Writer writer = new BufferedWriter(new OutputStreamWriter(
+                new FileOutputStream(dirRoute + File.separator + user + File.separator + "Received" + File.separator + dateFormat.format(date) + ".MSG"), "utf-8"))) {
+            writer.write(content);
+        }
+             
+        try (Writer writer = new BufferedWriter(new OutputStreamWriter(
+                new FileOutputStream(dirRoute + File.separator + user + File.separator + "Sent" + File.separator + dateFormat.format(date) + ".MSG"), "utf-8"))) {
+            writer.write(content);
+        }
+    }
+   
+   protected void buildDirectories(String parentFolder) {
+        new File(parentFolder).mkdir();
+        new File(parentFolder + File.separator + "Received").mkdir();
+        new File(parentFolder + File.separator + "Sent").mkdir();
+    }
 
 }

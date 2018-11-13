@@ -27,7 +27,7 @@ public class MessagesServlet extends HttpServlet {
         dirRoute = getServletConfig().getInitParameter("route");
     }
 
-    protected void pageGenerator(HttpServletRequest request, HttpServletResponse response)
+    protected void mainMethod(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
         user = request.getUserPrincipal().getName();
@@ -45,7 +45,6 @@ public class MessagesServlet extends HttpServlet {
         new File(parentFolder).mkdir();
         new File(parentFolder + File.separator + "Received").mkdir();
         new File(parentFolder + File.separator + "Sent").mkdir();
-
     }
 
     protected String[] listFilesInFolder(String receivedOrSent) {
@@ -62,21 +61,10 @@ public class MessagesServlet extends HttpServlet {
         return listOfMsgArray;
     }
 
-//    protected void newMessage() throws IOException {
-//
-//        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd-HH:mm");
-//        Date date = new Date();
-//        System.out.println(dateFormat.format(date));
-//
-//        try (Writer writer = new BufferedWriter(new OutputStreamWriter(
-//                new FileOutputStream(dirRoute + "\\" + user + "\\" + dateFormat.format(date) + ".msg"), "utf-8"))) {
-//            writer.write("something");
-//        }
-//    }
 
     protected void logOut() {
     }
-
+    
     protected void saveSession(HttpServletRequest request) {
         HttpSession session = request.getSession();
         session.setAttribute("user", user);
@@ -97,7 +85,7 @@ public class MessagesServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        pageGenerator(request, response);
+        mainMethod(request, response);
     }
 
     /**
@@ -111,7 +99,7 @@ public class MessagesServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        pageGenerator(request, response);
+        mainMethod(request, response);
     }
 
     /**

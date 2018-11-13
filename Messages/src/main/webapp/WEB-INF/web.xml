@@ -17,6 +17,10 @@
         <servlet-name>GetMessageServlet</servlet-name>
         <servlet-class>marianao.daw.messages.GetMessageServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>DeleteMessageServlet</servlet-name>
+        <servlet-class>marianao.daw.messages.DeleteMessageServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>MessagesServlet</servlet-name>
         <url-pattern>/secured/MessagesServlet</url-pattern>
@@ -28,6 +32,10 @@
     <servlet-mapping>
         <servlet-name>GetMessageServlet</servlet-name>
         <url-pattern>/GetMessageServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DeleteMessageServlet</servlet-name>
+        <url-pattern>/DeleteMessageServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
