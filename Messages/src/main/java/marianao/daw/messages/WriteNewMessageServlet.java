@@ -40,8 +40,9 @@ public class WriteNewMessageServlet extends HttpServlet {
         
         HttpSession session = request.getSession();
         String dirRoute = (String) session.getAttribute("dirRoute");
+        String userFrom = (String) session.getAttribute("user");
       
-        newMessage(request.getParameter("userSelected"), request.getParameter("content"), dirRoute );       
+        newMessage(request.getParameter("userSelected"), userFrom , request.getParameter("content"), dirRoute );       
         
         response.sendRedirect(request.getContextPath());
         
@@ -87,12 +88,12 @@ public class WriteNewMessageServlet extends HttpServlet {
     }// </editor-fold>
     
     
-   protected void newMessage(String user, String content, String dirRoute) throws IOException{
+   protected void newMessage(String userTo, String userFrom, String content, String dirRoute) throws IOException{
                       
        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd-HH.mm.ss");
        Date date = new Date();
        
-       String parentFolderStr = dirRoute + File.separator + user;
+       String parentFolderStr = dirRoute + File.separator + userTo;
        File parentFolder = new File(parentFolderStr);
        
        if (!parentFolder.exists()) {
@@ -100,12 +101,12 @@ public class WriteNewMessageServlet extends HttpServlet {
        }
            
         try (Writer writer = new BufferedWriter(new OutputStreamWriter(
-                new FileOutputStream(dirRoute + File.separator + user + File.separator + "Received" + File.separator + dateFormat.format(date) + ".MSG"), "utf-8"))) {
+                new FileOutputStream(dirRoute + File.separator + userTo + File.separator + "Received" + File.separator + dateFormat.format(date) + "-" + userFrom + ".MSG"), "utf-8"))) {
             writer.write(content);
         }
              
         try (Writer writer = new BufferedWriter(new OutputStreamWriter(
-                new FileOutputStream(dirRoute + File.separator + user + File.separator + "Sent" + File.separator + dateFormat.format(date) + ".MSG"), "utf-8"))) {
+                new FileOutputStream(dirRoute + File.separator + userFrom + File.separator + "Sent" + File.separator + dateFormat.format(date) + "-" + userTo + ".MSG"), "utf-8"))) {
             writer.write(content);
         }
     }

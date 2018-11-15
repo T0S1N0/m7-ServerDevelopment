@@ -13,8 +13,9 @@
     </head>
     <body>
         <h1>INBOX</h1>
-        <h3>From:   ${user}</h3>
-        <h3>At: ${date}</h3>
+        <h3>From:   ${requestScope.userName}</h3>
+        <h3>At: ${requestScope.date}</h3>
         <h3>Content:</h3>
+        <textarea value="${requestScope.msgContent}" />
     </body>
 </html>

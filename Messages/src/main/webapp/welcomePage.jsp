@@ -18,34 +18,47 @@
     </head>
     <body>
         <h1>Messages</h1>
-        <form method="POST" action="${pageContext.request.contextPath}/WriteNewMessageServlet">           
+        <form method="POST" action="${pageContext.request.contextPath}/WriteNewMessageServlet">  
+            
             <input type="button" value="Write New" onclick="displayTextArea()">
+            
             <select name="userSelected">
                 <option value="Dani">Dani</option>
                 <option value="Marta">Marta</option>
                 <option value="Miguel">Miguel</option>
             </select>
+            
             <textarea id="showthis" class="hide" style="display:none" placeholder="Redacta aqui tu mensaje" name="content" maxlength="250" rows="10" cols="100"></textarea>
+            
             <input type="submit" id="showthis2" class="hide" style="display:none" value="Send">
         </form>
-
+                
         <h3>Inbox</h3>
+        
         <h4>
             <c:forEach var="receivedMSG" items="${sessionScope.receivedMSG}">
-                <c:set var = "date" value = "${fn:substring(receivedMSG, 1, 18)}" />
+                
+                <c:set var = "date" value = "${fn:substring(receivedMSG, 0, 19)}" scope="request" />
+                
                     <form name="submitForm" method="POST" action="${pageContext.request.contextPath}/DeleteMessageServlet" >
 <!--                        montar una url con parametros-->
-                        <a href="showReceivedMsg.jsp?msg=${receivedMSG}&user=${sessionScope.user}&date=${date}"><c:out value = "${receivedMSG}"/></a>
+                        <c:url value = "${pageContext.request.contextPath}/GetMessageServlet" var = "msgUrl">
+                            <c:param name = "selectedMsg" value = "${receivedMSG}"/>
+                            <c:param name = "folder" value = "Received"/>
+                            <%--<c:param name = "user" value = "${sessionScope.user}"/>--%>
+                            <%--<c:param name = "date" value = "${date}"/>--%>
+                        </c:url>
+                        <a href="${msgUrl}"><c:out value = "${receivedMSG}"/></a>
                         
                         <input type="text" name="folder" style="display:none" value="Received"/>
                         <input type="text" name="msg" style="display:none" value="${receivedMSG}"/>
                         
                         
-                        <input type="image" src="https://cdn0.iconfinder.com/data/icons/classic-icons/512/058.png" alt="delete" height="22" width="22" >
+                        <input type="image" src="https://cdn0.iconfinder.com/data/icons/classic-icons/512/058.png" alt="delete" height="22" width="22" onclick="return confirm('Are you sure you want to delete this message?')">
                     </form>    
             </c:forEach>
         </h4>
-
+        
         <h3>Sent</h3>
         <h4>
             <c:forEach var="sentMSG" items="${sessionScope.sentMSG}">
@@ -56,7 +69,7 @@
                         <input type="text" name="msg" style="display:none" value="${sentMSG}"/>
                         
                         
-                        <input type="image" src="https://cdn0.iconfinder.com/data/icons/classic-icons/512/058.png" alt="delete" height="22" width="22" >
+                        <input type="image" src="https://cdn0.iconfinder.com/data/icons/classic-icons/512/058.png" alt="delete" height="22" width="22" onclick="return confirm('Are you sure you want to delete this message?')">
                     </form>
             </c:forEach>
         </h4>

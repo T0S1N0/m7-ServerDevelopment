@@ -5,12 +5,19 @@
  */
 package marianao.daw.messages;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -18,30 +25,54 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class GetMessageServlet extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet GetMessageServlet</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet GetMessageServlet at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+
+        HttpSession session = request.getSession();
+
+        String msgSelected = request.getParameter("msgSelected");
+        
+        String date = msgSelected.substring(0, 19);
+//        esto quita los ultimos 4 caracteres del nombre del archivo para poder sacar el nombre del usuario
+        int exception = msgSelected.length() - 4;
+        
+        String userName = msgSelected.substring(20, exception);
+        
+        System.out.println(date);
+        System.out.println(userName);
+
+        String folder = request.getParameter("folder");
+
+        String msgRoute = session.getAttribute("dirRoute") + File.separator + session.getAttribute("user") + File.separator + folder + File.separator + msgSelected;
+
+        String msgContent = findSelectedMsg(msgRoute);
+        
+        response.sendRedirect(request.getContextPath() + "/showReceivedMsg.jsp?msgCotent=" + msgContent + "&user=" + userName + "&date=" + date);
+    }
+
+    protected String findSelectedMsg(String msgRoute) {
+        BufferedReader reader = null;
+        String msgContent = "";
+        try {
+            File file = new File(msgRoute);
+            reader = new BufferedReader(new FileReader(file));
+
+            String line;
+            while ((line = reader.readLine()) != null) {
+                msgContent += line + "\n";
+                System.out.println(msgContent);
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                reader.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
+        return msgContent;
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
