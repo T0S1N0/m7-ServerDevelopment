@@ -1,45 +1,50 @@
 
-import java.io.BufferedWriter;
+import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
 /**
  *
- * @author mique
+ * @author mmartin
  */
 public class Test {
+    public static void main(String [ ] args){
+        String msg = "2018-11-16-10.52.53-Dani.MSG";
+        String msgRoute = "C:" + File.separator + "usersMail" + File.separator + "Dani" + File.separator + "Received" + File.separator + msg;
+        
+        //System.out.println(msg.substring(0, 19));
+        
+        //int exception = msg.length() - 4;
+        
+        //System.out.println(msg.substring(20, exception));
+        
+        
+     BufferedReader reader = null;
+        String msgContent = "";
+        try {
+            File file = new File(msgRoute);
+            reader = new BufferedReader(new FileReader(file));
 
-    public static void main(String[] args) throws IOException {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                msgContent += line;
+            }
 
-//        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd-HH:mm");
-//        Date date = new Date();
-//        System.out.println(dateFormat.format(date));
-//
-//        //String fileName = dateFormat.format(date) + ".msg";
-//        //System.out.println(fileName);
-//        try (Writer writer = new BufferedWriter(new OutputStreamWriter(
-//                new FileOutputStream("C:\\usersMail\\" + dateFormat.format(date) + ".msg"), "utf-8"))) {
-//            writer.write("something");
-//        }
-        File folder = new File("C:\\usersMail\\Dani\\Received");
-        File[] listOfFiles = folder.listFiles();
-
-        for (int i = 0; i < listOfFiles.length; i++) {
-            if (listOfFiles[i].isFile()) {
-                System.out.println("File " + listOfFiles[i].getName());
-            } else if (listOfFiles[i].isDirectory()) {
-                System.out.println("Directory " + listOfFiles[i].getName());
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                reader.close();
+                System.out.println(msgContent);
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
     }
