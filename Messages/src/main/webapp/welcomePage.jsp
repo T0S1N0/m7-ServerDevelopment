@@ -14,38 +14,34 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
         <title>Welcome Messages</title>
 
     <form method="link" action="${pageContext.request.contextPath}/logOut">
-        <input type="submit" class="btn btn-danger btn-lg" value="Logout"/>
+        <input type="submit" class="btn btn-danger btn-lg" value="Logout"  style="float: right;"/>
     </form>
 </head>
 
 <body>
-    <h1>Messages ${sessionScope.user}</h1>
+    <h1 style="text-align: center;">Messages ${sessionScope.user}</h1>
+    <div>
+       <input type="button" class="btn btn-primary btn-lg" value="Write New" onclick="displayTextArea();characterCount();" style="margin-bottom: 2%;width: 20%; text-align: center; margin-left: 37%;">
 
+        <div id="showthis" class="hide" style="display:none; margin-left: 25%; width: 50%;">
+            <form accept-charset="UTF-8" method="POST" action="${pageContext.request.contextPath}/WriteNewMessageServlet" class="form-group">
 
-    <div class="btn-group">
-  
+                <input class="form-control" type="text" name="userSelected" placeholder="Destinatary" style="margin-bottom: 1%;" required>
 
-            <input type="button" class="btn btn-primary btn-lg" value="Write New" onclick="displayTextArea();characterCount();">
-                    
-            <div id="showthis" class="hide" style="display:none; margin-left: 1em;">
-                <form accept-charset="UTF-8" method="POST" action="${pageContext.request.contextPath}/WriteNewMessageServlet" class="form-group">
-                    
-                <input class="form-control" type="text" name="userSelected" placeholder="Destinatary" required>
+                <textarea id="content" class="form-control"  placeholder="Write here your message" name="content" maxlength="250" rows="7" cols="30" required></textarea>
 
-                <textarea id="content" class="form-control"  placeholder="Write here your message" name="content" maxlength="250" rows="10" cols="100" required></textarea>
-                
                 <h6 class="pull-right" id="count_message"></h6>
-                
-                <input type="submit" class="btn btn-info" value="Send">
-                </form>
-            </div>
 
+                <input type="submit" class="btn btn-info" value="Send">
+            </form>
+        </div>
     </div>
 
-    <div class="btn-group">
+    <div class="btn-group" style="margin-left: 39%;">
         <button type="button" class="btn btn-primary btn-lg dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">INBOX</button>
         <div class="dropdown-menu">
             <c:forEach var="receivedMSG" items="${sessionScope.receivedMSG}">
@@ -125,8 +121,10 @@
             });
         }
     </script>    
+    
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
-</body>
+    </div>
+
 </html>
