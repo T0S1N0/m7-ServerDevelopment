@@ -13,6 +13,8 @@ body, html {
     margin: 0;
 }
 
+/*STYLES FOR LOGIN*/
+
 /* Full-width input fields */
 input[type=text], input[type=password] {
     width: 100%;
@@ -132,17 +134,28 @@ span.psw {
     }
 }
 
-
 .center{
     width:50%; 
     margin-left: 25%;
 }
 
+/*BACKGROUND*/
+
 .bg {
-    font-family: Arial, Helvetica, sans-serif;
-    background-image: url("../images/background.jpg");
-    background-position-y: 40%;
+    background-image: url("../images/welcomebg.png");
     background-repeat: no-repeat;
     background-size: cover;
 }
 
+/*SHOW MESSAGES LAYOUTS*/
+
+.footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background-color: red;
+    color: white;
+    text-align: center;
+    background-color: seashell;
+}

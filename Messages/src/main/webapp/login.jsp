@@ -8,11 +8,12 @@
 <html>
     <head>
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="CustomStyles/loginStyle.css" type="text/css">
+        <link rel="stylesheet" href="CustomStyles/styles.css" type="text/css">
     </head>
+    
     <body class="bg">
         <div class="center">
-            <h2 style="text-align: center;">Bienvenido</h2>
+            <h1 style="text-align: center; color: white;">LOGIN TO SEE YOUR MESSAGES</h1>
             <button class="center" onclick="document.getElementById('id01').style.display = 'block'">Login</button>
         </div>
         <div id="id01" class="modal">
