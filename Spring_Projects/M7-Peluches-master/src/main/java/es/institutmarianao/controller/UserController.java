@@ -95,7 +95,6 @@ public class UserController {
 
     private void loginUser(User user, HttpServletRequest request) {
         try {
-            // Must be called from request filtered by Spring Security, otherwise SecurityContextHolder is not updated
             UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword());
             token.setDetails(new WebAuthenticationDetails(request));
             Authentication authentication = authenticationProvider.authenticate(token);

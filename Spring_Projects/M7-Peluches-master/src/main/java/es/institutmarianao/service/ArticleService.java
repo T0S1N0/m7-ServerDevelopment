@@ -10,7 +10,7 @@ import java.util.List;
 
 /**
  *
- * @author soka
+ * @author mmartin
  */
 public interface ArticleService {
 

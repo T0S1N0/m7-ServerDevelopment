@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 
 /**
  *
- * @author soka
+ * @author mmartin
  */
 @Service
 public class ArticleServiceImpl implements ArticleService {

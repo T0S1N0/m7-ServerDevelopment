@@ -5,12 +5,6 @@
  */
 package es.institutmarianao.domain;
 
-import org.springframework.core.io.Resource;
-
-/**
- *
- * @author Toni
- */
 public class Article {
 
     String reference;

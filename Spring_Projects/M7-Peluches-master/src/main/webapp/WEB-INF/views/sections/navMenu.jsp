@@ -3,6 +3,13 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ page contentType="text/html" pageEncoding="UTF-8"%>
+
+        <link type="text/css" rel="stylesheet" href="../stylesheets/styles.css" />
+        <link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+        <script src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+        <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+        <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
 <div class="container-fluid ">
     <div class="col-lg-8">
         <h2><spring:message code="navMenu.teddies"/></h2>
@@ -11,6 +18,7 @@
         <div class="btn-group ">
             <a href="?language=es" class="btn btn-default"><spring:message code="navMenu.language.spanish"/></a>
             <a href="?language=en" class="btn btn-default"><spring:message code="navMenu.language.english"/></a>
+            <a href="?language=cat" class="btn btn-default"><spring:message code="navMenu.language.catala"/></a>
         </div> 
     </div>
 </div>
@@ -23,17 +31,18 @@
             <sec:authentication var="user" property="principal" />
             <ul class="nav navbar-nav navbar-right">
                 <li>
-                    <div class="dropdown" style="margin:10px">
-                        <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown"><span class="glyphicon glyphicon-user"></span>${user}
-                            <span class="caret"></span></button>
-                        <ul class="dropdown-menu">
-                            <li class="${activeUserData}"><a href="<spring:url value='/secured/updateUser'/>"><spring:message code="navMenu.dropdown.userdata"/></a></li>
-                            <li class="${activeOrders}"><a href="<spring:url value='/secured/orders'/>"><spring:message code="navMenu.dropdown.orders"/></a></li>
-                            <li class="divider"></li>
-                            <li>
+
+                    <div class="dropdown" style="margin: 8px 30px 0px 0px">
+                        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" ><spring:message code="navMenu.dropdown.settings"/></button>
+                        
+                        <div class="dropdown-menu">
+                            <a class="${activeUserData}"><a href="<spring:url value='/secured/updateUser'/>"><spring:message code="navMenu.dropdown.userdata"/></a>
+                                <br/>
+                                <a href="<spring:url value='/secured/orders'/>"><spring:message code="navMenu.dropdown.orders"/></a>
+                                <br/>
+                                <div class="dropdown-divider"></div>
                                 <a href="<spring:url value='/logout'/>"><span class="glyphicon glyphicon-log-out"></span><spring:message code="navMenu.dropdown.logout"/></a>
-                            </li>
-                        </ul>
+                        </div>
                     </div>
                 </li>
             </ul>

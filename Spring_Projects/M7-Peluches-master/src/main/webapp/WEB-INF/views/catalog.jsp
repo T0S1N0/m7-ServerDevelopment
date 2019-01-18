@@ -2,11 +2,11 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ page contentType="text/html" pageEncoding="UTF-8"%>
+
 <!DOCTYPE html>
 <html>
     <head>
         <jsp:include page="sections/head.jsp"/>
-        <link type="text/css" rel="stylesheet" href="../stylesheets/styles.css" />
     </head>
     <body>
         <c:set var="activeCatalog" value="active" scope="request" />
@@ -23,7 +23,7 @@
                                 <div class="caption">
                                     <h4>${article.name}</h4> 
                                 </div>
-                                <img src="<spring:url value="/images/${article.image}"/>" class="img-responsive">
+                                <!--<img src="<spring:url value="/images/${article.image}"/>" class="img-responsive">-->
                                 <div class="panel panel-default">
                                     <div class="panel-body" style="height: 100%; width: 100%; overflow-y: auto;">
                                         ${article.description}
@@ -39,37 +39,51 @@
                     </c:forEach>
                 </div>
 
+                <div id="shoppingCart" class="col-lg-4" style="float: right;" >
+                        <table id="cart" class="table table-hover table-condensed">
+                            <c:forEach items="${shoppingCart.articles}"  var="article" >
 
+                                <thead>
+                                    <tr>
+                                        <th style="width:50%">Producto</th>
+                                        <th style="width:10%" class="text-center">Precio</th>
+                                        <th style="width:10%">Unidades</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td data-th="Product">
+                                            <div class="row">
+                                                <div class="col-sm-3 hidden-xs"><img src="<spring:url value="/images/${article.key.image}"/> " style="width: 100%; height: 100%"/></div>
+                                                <p>${article.key.description}   </p>
+                                                <div class="col-sm-10">
+                                                    <h4 class="nomargin">${article.key.name}</h4>                                             
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td data-th="Price" class="text-center">${article.key.price} $</td>
+                                        <td data-th="Subtotal" class="text-center">${article.value}</td>
+                                        <td class="actions" data-th="">
+                                            <a href="<spring:url value="/removeFromCart?reference=${article.key.reference}"/>">
+                                                <button value="Eliminar" class="btn btn-danger btn-sm"><i class="fa fa-trash-o"></i></button>								
+                                            </a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </c:forEach>
 
-            <div id="shoppingCart" class="col-lg-4" style="float: right;">
-                <c:forEach items="${shoppingCart.articles}" var="article">
-                    <img src="<spring:url value="/images/${article.key.image}"/> " class="img-responsive">
-                    <h4>${article.key.name}</h4>
-                    <div>
-                        <p>${article.key.description}</p>
+                            <tfoot>
+                                <tr class="visible-xs">
+                                    <td class="text-center"><strong>${shoppingCart.getTotalPrice()} $</strong></td>
+                                </tr>
+                                <tr>
+                                    <td class="hidden-xs text-center"><strong>Total ${shoppingCart.getTotalPrice()} $</strong></td>
+                                    <td><a href="#" class="btn btn-success btn-block">Checkout <i class="fa fa-angle-right"></i></a></td>
+                                </tr>
+                            </tfoot>
+                        </table>
                     </div>
-                    <div>
-                        <a href="<spring:url value="/decreaseFromCart?reference=${article.key.reference}"/>">
-                            <input type="button" class="btn btn-light btn-lg btnImage dropOfCart">
-                        </a>
-                        ${article.value}
-                        <a href="<spring:url value="/addToCart?reference=${article.key.reference}"/>">
-                            <input type="button" class="btn btn-light btn-lg btnImage addToCart">
-                        </a>
-                    </div>
-
-                    <h4>Precio/Unidad = ${article.key.price}</h4>
-                    <h4>Precio de ${article.value} Unidades = ${article.key.price * article.value}</h4>
-                    <div> 
-                        <a href="<spring:url value="/removeFromCart?reference=${article.key.reference}"/>">
-                            <input type="button" value="Eliminar" class="btn btn-danger">
-                    </div>
-                </c:forEach>
-                <h2>Total a pagar: ${shoppingCart.getTotalPrice()}</h2>
-            </div>
+                </div>
         </div>
-                        </div>
-        <!--FMT: PARA FORMAT NUMBER EN JSTL-->
-
-    </body>
-</html>
+                </body>
+                </html>

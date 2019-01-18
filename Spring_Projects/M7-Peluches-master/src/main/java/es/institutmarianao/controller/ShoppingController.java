@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
-/* Busca un ModelAttribute llamado "shopingCart" para inicializarlo y ponerlo en sesión */
+
 @SessionAttributes("shoppingCart")
 public class ShoppingController {
 
