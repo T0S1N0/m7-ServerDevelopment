@@ -31,7 +31,7 @@
                                 </div>
                                 <p>${article.price} €</p>
                                 <a class="bnt btn-info btn-md" href="<spring:url value="/addToCart?reference=${article.reference}"/>">
-                                    <button class="btn btn-primary btn-lg btnImage addToCart">AddToCart</button>
+                                    <button class="btn btn-primary btn-lg btnImage addToCart"><spring:message code="catalog.addtocart"/></button>
                                 </a>
 
                             </div>   
@@ -45,9 +45,9 @@
 
                             <thead>
                                 <tr>
-                                    <th style="width:50%">Producto</th>
-                                    <th style="width:10%" class="text-center">Precio</th>
-                                    <th style="width:10%">Unidades</th>
+                                    <th style="width:50%"><spring:message code="catalog.product"/></th>
+                                    <th style="width:10%" class="text-center"><spring:message code="catalog.price"/></th>
+                                    <th style="width:10%"><spring:message code="catalog.value"/></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -61,8 +61,8 @@
                                             </div>
                                         </div>
                                     </td>
-                                    <td data-th="Price" class="text-center">${article.key.price} $</td>
-                                    <td data-th="Subtotal" class="text-center">${article.value}</td>
+                                    <td data-th="<spring:message code="catalog.price"/>" class="text-center">${article.key.price} $</td>
+                                    <td data-th="<spring:message code="catalog.value"/>" class="text-center">${article.value}</td>
                                     <td class="actions" data-th="">
                                         <a href="<spring:url value="/removeFromCart?reference=${article.key.reference}"/>">
                                             <button value="Eliminar" class="btn btn-danger btn-sm"><i class="fa fa-trash-o"></i></button>								
